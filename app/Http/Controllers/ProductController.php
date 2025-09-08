@@ -38,4 +38,20 @@ class ProductController extends Controller
         return Inertia::render("Products/Edit", compact('product'));
     }
 
+    public function update(Request $request, Product $product){
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string'
+        ]);
+
+        $product->update([
+            'name' => $request->input('name'),
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+        ]);
+
+        return redirect()->route('products.index')->with('message', 'Product updated successfully');
+    }
+
 }

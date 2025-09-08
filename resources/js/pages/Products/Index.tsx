@@ -6,6 +6,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { Bell } from 'lucide-react';
 import { route } from 'ziggy-js';
+import { PageProps as InertiaPageProps } from '@inertiajs/core';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,15 +22,14 @@ interface Product {
     description: string;
 }
 
-interface PageProps {
-    flash: {
-        message?: string;
-    };
-    products: Product[];
+interface CustomPageProps extends InertiaPageProps {
+  flash: {
+    message?: string;
+  };
+  products: Product[];
 }
-
 export default function Index() {
-    const { products, flash } = usePage().props as PageProps;
+    const { products, flash } = usePage<CustomPageProps>().props;
 
     const {processing, delete: destroy} = useForm();
 
@@ -42,13 +42,13 @@ export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Products" />
-            <div>
+            <div className="m-4">
                 <Link href={route('products.create')}>
                     <Button>Create a product</Button>
                 </Link>
             </div>
 
-            <div className="m-4">
+            <div>
                 {flash.message && (
                     <Alert>
                         <Bell />
@@ -79,7 +79,7 @@ export default function Index() {
                                     <TableCell>{product.price}</TableCell>
                                     <TableCell>{product.description}</TableCell>
                                     <TableCell className="text-center space-x-3">
-                                        <Button className="bg-slate-500 hover:bg-slate-700">Edit</Button>
+                                        <Link href={route("products.edit", product.id)}><Button className="bg-slate-500 hover:bg-slate-700">Edit</Button></Link>
                                         <Button disabled={processing} onClick={() => handleDelete(product.id, product.name)} className="bg-red-500 hover:bg-red-700">Delete</Button>
                                     </TableCell>
                                 </TableRow>

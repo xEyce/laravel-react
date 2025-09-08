@@ -63,7 +63,7 @@ export default function Index() {
                         <Label htmlFor='product_description'>Description</Label>
                         <Textarea placeholder='Description' value={data.description} onChange={(e) => setData('description', e.target.value)}></Textarea>
                     </div>
-                    <Button type="submit">Add Product</Button>
+                    <Button disabled={processing} type="submit">Add Product</Button>
                 </form>
             </div>
         </AppLayout>
